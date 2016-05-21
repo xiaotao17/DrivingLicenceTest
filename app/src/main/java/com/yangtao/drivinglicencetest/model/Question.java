@@ -7,6 +7,8 @@ package com.yangtao.drivinglicencetest.model;
 public class Question {
     //试题id
     private int mId;
+    //题目序号
+    private int mSn;
     //题目
     private String mQuestion;
     //正确答案编号
@@ -20,6 +22,7 @@ public class Question {
     private String mExplains;
     //图片地址
     private String mPictureUrl;
+
 
     public int getAnswer() {
         return mAnswer;
@@ -91,5 +94,13 @@ public class Question {
 
     public void setQuestion(String question) {
         mQuestion = question;
+    }
+
+    public int getSn() {
+        return mSn;
+    }
+
+    public void setSn(int sn) {
+        mSn = sn;
     }
 }

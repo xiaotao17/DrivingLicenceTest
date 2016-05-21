@@ -1,6 +1,5 @@
 package com.yangtao.drivinglicencetest.util;
 
-import android.content.Context;
 
 import com.yangtao.drivinglicencetest.db.QuestionDB;
 import com.yangtao.drivinglicencetest.model.Question;
@@ -13,20 +12,23 @@ import org.json.JSONObject;
  * Created by YANGTAO on 2016/5/20.
  */
 public class Utility {
-    public static void handleQuestionResponse(QuestionDB questionDB, String response) {
+    public static boolean handleQuestionResponse(QuestionDB questionDB, String response) {
+        questionDB.deleteQuestions();
         try {
-            JSONArray jsonArray = new JSONArray(response);
-            for (int i = 0; i< jsonArray.length(); i++){
-                JSONObject JSONquestion = jsonArray.getJSONObject(i);
-                String question = JSONquestion.getString("question");
-                int answer = Integer.parseInt(JSONquestion.getString("answer"));
-                String item1 = JSONquestion.getString("item1");
-                String item2 = JSONquestion.getString("item2");
-                String item3 = JSONquestion.getString("item3");
-                String item4 = JSONquestion.getString("item4");
-                String explains = JSONquestion.getString("explains");
-                String url = JSONquestion.getString("url");
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("result");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject JSONQuestion = jsonArray.getJSONObject(i);
+                String question = JSONQuestion.getString("question");
+                int answer = Integer.parseInt(JSONQuestion.getString("answer"));
+                String item1 = JSONQuestion.getString("item1");
+                String item2 = JSONQuestion.getString("item2");
+                String item3 = JSONQuestion.getString("item3");
+                String item4 = JSONQuestion.getString("item4");
+                String explains = JSONQuestion.getString("explains");
+                String url = JSONQuestion.getString("url");
                 Question question1 = new Question();
+                question1.setSn(i + 1);
                 question1.setQuestion(question);
                 question1.setAnswer(answer);
                 question1.setItem1(item1);
@@ -37,8 +39,10 @@ public class Utility {
                 question1.setPictureUrl(url);
                 questionDB.saveQuestion(question1);
             }
-        }catch (JSONException e) {
+            return true;
+        } catch (JSONException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }

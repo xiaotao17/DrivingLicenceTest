@@ -31,9 +31,10 @@ public class QuestionDB {
         return  mQuestionDB;
     }
 
-    public void saveQuestion (Question question) {
+    public  void saveQuestion (Question question) {
         if (question != null){
             ContentValues values = new ContentValues();
+            values.put("sn",question.getSn());
             values.put("question", question.getQuestion());
             values.put("answer",question.getAnswer());
             values.put("item1",question.getItem1());
@@ -46,11 +47,12 @@ public class QuestionDB {
         }
     }
 
-    public Question queryQuestionById(int id) {
-        Cursor cursor = mDb.query("Question",null,"id = ?",new String[]{String.valueOf(id)},null,null,null);
-        if (cursor != null) {
+    public  Question queryQuestionBySn(int sn) {
+        Cursor cursor = mDb.rawQuery("select * from Question where sn = " + sn,null);
+        if (cursor.moveToFirst()) {
             Question question = new Question();
             question.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            question.setSn(cursor.getInt(cursor.getColumnIndex("sn")));
             question.setQuestion(cursor.getString(cursor.getColumnIndex("question")));
             question.setAnswer(cursor.getInt(cursor.getColumnIndex("answer")));
             question.setItem1(cursor.getString(cursor.getColumnIndex("item1")));
@@ -62,6 +64,10 @@ public class QuestionDB {
             return question;
         }
         return null;
+    }
+
+    public void deleteQuestions(){
+        mDb.execSQL("delete from Question" );
     }
 
 }

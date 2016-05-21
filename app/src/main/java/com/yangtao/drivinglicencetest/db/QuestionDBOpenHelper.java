@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class QuestionDBOpenHelper extends SQLiteOpenHelper {
     public static final String CREATE_QUESTION = "create table Question ("
             + "id integer primary key autoincrement,"
+            + "sn integer,"
             + "question text,"
             + "answer integer,"
             + "item1 text,"
