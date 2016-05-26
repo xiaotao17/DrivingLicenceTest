@@ -1,5 +1,6 @@
 package com.yangtao.drivinglicencetest.activity;
 
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton radioButton1, radioButton2, radioButton3, radioButton4;
     private Button btn_OK;
+    private ProgressDialog mProgressDialog;
 
     private File cache;
 
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
         cache = new File(getCacheDir(),"image");
         if (!cache.exists()){
            cache.mkdirs();
@@ -54,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 100; i++) {
             scores[i] = new Score();
         }
-
+        showProgressDialog();
+        setContentView(R.layout.activity_main);
         tv_question = (TextView) findViewById(R.id.textview_question);
         img_question = (ImageView) findViewById(R.id.imgview_question);
         radioGroup = (RadioGroup) findViewById(R.id.radio_group);
@@ -71,9 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 boolean result = false;
                 result = Utility.handleQuestionResponse(questionDB, response);
                 if (result) {
+                    closeProgressDialog();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             currentQuestionSN = 1;
                             showQuestion();
 
@@ -109,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         answer = 0;
                 }
                 scores[currentQuestionSN-1].setSn(currentQuestionSN);
-                if (answer == mQuestion.getAnswer()) {
+                if (answer == mQuestion.getRightAnswer()) {
                     scores[currentQuestionSN-1].setRight(true);
                 } else {
                     scores[currentQuestionSN-1].setRight(false);
@@ -143,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showQuestion() {
-        mQuestion = questionDB.queryQuestionBySn(currentQuestionSN);
-        tv_question.setText(mQuestion.getSn() + "、"+ mQuestion.getQuestion());
+        mQuestion = questionDB.queryQuestion(currentQuestionSN);
+        tv_question.setText(mQuestion.getSerialNumber() + "、"+ mQuestion.getQuestion());
 
         if (!mQuestion.getPictureUrl().isEmpty()){
-            img_question.setVisibility(View.VISIBLE);
+            img_question.setVisibility(View.INVISIBLE);
             new Thread(){
                 public void run() {
                     try {
@@ -156,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    img_question.setVisibility(View.VISIBLE);
                                     img_question.setImageURI(mPictureUri);
                                 }
                             });
@@ -193,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void showScore() {
+    private void showScore() {
         score = 0;
         for (Score s : scores){
             if (s.isRight()) {
@@ -203,5 +209,20 @@ public class MainActivity extends AppCompatActivity {
         tv_question.setText("你的成绩：" + score);
         img_question.setVisibility(View.GONE);
         radioGroup.setVisibility(View.GONE);
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("正在加载……");
+            mProgressDialog.setCanceledOnTouchOutside(false);
+        }
+        mProgressDialog.show();
+    }
+
+    private void closeProgressDialog(){
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+        }
     }
 }

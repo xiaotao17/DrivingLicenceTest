@@ -18,7 +18,9 @@ public class QuestionDBOpenHelper extends SQLiteOpenHelper {
             + "item3 text,"
             + "item4 text,"
             + "explains text,"
-            + "url text)";
+            + "url text,"
+            + "subject integer,"
+            + "model text)";
 
     public QuestionDBOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

@@ -8,11 +8,11 @@ public class Question {
     //试题id
     private int mId;
     //题目序号
-    private int mSn;
+    private int mSerialNumber;
     //题目
     private String mQuestion;
     //正确答案编号
-    private int mAnswer;
+    private int mRightAnswer;
     //选项1，2，3，4
     private String mItem1;
     private String mItem2;
@@ -22,14 +22,21 @@ public class Question {
     private String mExplains;
     //图片地址
     private String mPictureUrl;
+    //科目
+    private int mSubject;
+    //车型
+    private String mModel;
+    //考生选项
+    private int mAnswer;
+    //是否答过
+    private boolean isDone;
 
-
-    public int getAnswer() {
-        return mAnswer;
+    public int getRightAnswer() {
+        return mRightAnswer;
     }
 
-    public void setAnswer(int answer) {
-        mAnswer = answer;
+    public void setRightAnswer(int rightAnswer) {
+        mRightAnswer = rightAnswer;
     }
 
     public String getExplains() {
@@ -96,11 +103,43 @@ public class Question {
         mQuestion = question;
     }
 
-    public int getSn() {
-        return mSn;
+    public int getSerialNumber() {
+        return mSerialNumber;
     }
 
-    public void setSn(int sn) {
-        mSn = sn;
+    public void setSerialNumber(int serialNumber) {
+        mSerialNumber = serialNumber;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
+    }
+
+    public int getAnswer() {
+        return mAnswer;
+    }
+
+    public void setAnswer(int answer) {
+        mAnswer = answer;
+    }
+
+    public String getModel() {
+        return mModel;
+    }
+
+    public void setModel(String model) {
+        mModel = model;
+    }
+
+    public int getSubject() {
+        return mSubject;
+    }
+
+    public void setSubject(int subject) {
+        mSubject = subject;
     }
 }

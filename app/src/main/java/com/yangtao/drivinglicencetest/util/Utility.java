@@ -28,9 +28,9 @@ public class Utility {
                 String explains = JSONQuestion.getString("explains");
                 String url = JSONQuestion.getString("url");
                 Question question1 = new Question();
-                question1.setSn(i + 1);
+                question1.setSerialNumber(i + 1);
                 question1.setQuestion(question);
-                question1.setAnswer(answer);
+                question1.setRightAnswer(answer);
                 question1.setItem1(item1);
                 question1.setItem2(item2);
                 question1.setItem3(item3);
